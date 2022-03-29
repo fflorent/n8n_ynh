@@ -80,6 +80,11 @@ then
 	popd
 fi
 
+if ynh_compare_current_package_version --comparison lt --version 0.169.0~ynh2 && [ -x /usr/bin/sqlite3 ]
+then
+	sqlite3 "$datadir/database.sqlite" .dump | python ./sqlite3-to-mysql.py | mysql n8n
+fi
+
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
 chown -R $app:www-data "$final_path"
